@@ -55,9 +55,9 @@ public class FileSystemStorageService implements StorageService {
         throw new StorageException("File has wrong format" + fileName);
     }
 
-    public void delete(String fileNmae) {
-        if(!fileNmae.isEmpty()) {
-            Path path = Paths.get(rootLocation + "/" + fileNmae.replace(fileRequest, ""));
+    public void delete(String fileName) {
+        if(!fileName.isEmpty()) {
+            Path path = Paths.get(rootLocation + "/" + fileName.replace(fileRequest, ""));
             try {
                 Files.deleteIfExists(path);
             } catch (IOException e) {

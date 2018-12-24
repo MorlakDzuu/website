@@ -25,7 +25,7 @@
         <i class="material-icons right">send</i>
     </button>
 </form>
- <a onclick="M.toast({html: '${task?if_exists.name?if_exists}'})" class="btn">Toast!</a>
+ <a onclick="M.toast({html: '${name?if_exists}'})" class="btn">Toast!</a>
 <script type="text/javascript">
     var taskForm = document.getElementById("addTaskForm");
     var validateElements = document.querySelectorAll('.val');

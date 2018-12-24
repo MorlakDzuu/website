@@ -4,6 +4,7 @@ import com.website.website.domain.Task;
 import com.website.website.domain.User;
 import com.website.website.repo.TaskRepo;
 import com.website.website.repo.UserRepo;
+import com.website.website.service.storage.FileSystemStorageService;
 import com.website.website.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,11 +20,15 @@ import java.util.List;
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    UserRepo userRepo;
 
     @Autowired
-    TaskRepo taskRepo;
+    private TaskRepo taskRepo;
+
+    @Autowired
+    private FileSystemStorageService storageService;
+
+    @Value("${max.files.number}")
+    int MAX_FILES_NUMBER;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -40,6 +45,7 @@ public class UserController {
                        Model model) {
         List<Task> tasks = taskRepo.findAllByUserOrderByDate(user);
         model.addAttribute("tasksNumber", tasks.size());
+        model.addAttribute("downloadsLeft",MAX_FILES_NUMBER - storageService.getFilesNumber(user));
         return "user/userPersonalArea";
     }
 

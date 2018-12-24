@@ -12,6 +12,7 @@
                     <p class="card-text">${name}</p>
                     <p class="card-text">${email}</p>
                     <p class="card-text">Number of tasks: ${tasksNumber}</p>
+                    <p class="card-text">Uploads left: ${downloadsLeft}</p>
                 </div>
             </div>
         </div>
