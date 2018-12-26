@@ -25,7 +25,16 @@
         <i class="material-icons right">send</i>
     </button>
 </form>
- <a onclick="M.toast({html: '${name?if_exists}'})" class="btn">Toast!</a>
+<#if task??>
+    <ul class="collection with-header">
+        <li class="collection-header"><h4>Files</h4></li>
+        <#list files?sort_by("filename") as file>
+          <li class="collection-item">
+              <div>${file.filename}</div>
+          </li>
+        </#list>
+    </ul>
+</#if>
 <script type="text/javascript">
     var taskForm = document.getElementById("addTaskForm");
     var validateElements = document.querySelectorAll('.val');

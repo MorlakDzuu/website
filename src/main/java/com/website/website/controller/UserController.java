@@ -3,7 +3,6 @@ package com.website.website.controller;
 import com.website.website.domain.Task;
 import com.website.website.domain.User;
 import com.website.website.repo.TaskRepo;
-import com.website.website.repo.UserRepo;
 import com.website.website.service.storage.FileSystemStorageService;
 import com.website.website.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -53,8 +53,14 @@ public class UserController {
     public String updateUser(@AuthenticationPrincipal User user,
                              @RequestParam(required = false) String name,
                              @RequestParam(required = false) String email,
-                             @RequestPart(name = "file", required = false) MultipartFile file) {
-        userService.updateUser(user, name, email, file);
-        return "redirect:/user";
+                             @RequestPart(name = "file", required = false) MultipartFile file,
+                             Model model) {
+        List<String> notes = userService.updateUser(user, name, email, file);
+        List<Task> tasks = taskRepo.findAllByUserOrderByDate(user);
+        notes.toArray();
+        model.addAttribute("notes", notes);
+        model.addAttribute("tasksNumber", tasks.size());
+        model.addAttribute("downloadsLeft",MAX_FILES_NUMBER - storageService.getFilesNumber(user));
+        return "user/userPersonalArea";
     }
 }

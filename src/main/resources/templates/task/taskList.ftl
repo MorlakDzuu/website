@@ -6,7 +6,7 @@
     <div class="row">
         <div class="col s10">
             <a href="/task/${task.id}">
-                <div class="card-panel teal">
+                <div class="card-panel teal z-depth-4">
                     <span class="white-text">${task.name?if_exists}</span>
                     <#if task.finish_date??><span class="yellow-text right">To do before: ${task.finish_date?if_exists}</span></#if>
                 </div>

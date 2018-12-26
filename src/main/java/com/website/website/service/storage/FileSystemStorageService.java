@@ -6,6 +6,7 @@ import com.website.website.domain.User;
 import com.website.website.repo.FilesRepo;
 import com.website.website.repo.TaskRepo;
 import com.website.website.repo.UserRepo;
+import com.website.website.service.notes.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -21,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -52,7 +54,7 @@ public class FileSystemStorageService implements StorageService {
                 return true;
             }
         }
-        throw new StorageException("File has wrong format" + fileName);
+        return false;
     }
 
     public void delete(String fileName) {

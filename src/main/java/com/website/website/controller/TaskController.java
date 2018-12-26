@@ -44,6 +44,15 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    protected List<File> getTasksFiles(Task task) {
+        List<File> files = filesRepo.findAllByTask(task);
+        for (File file: files) {
+            String name = file.getFilename();
+            file.setFilename(name.substring(name.indexOf('.') + 1));
+        }
+        return files;
+    }
+
     @GetMapping("/addTask")
     public String returnTaskForm() {
         return "task/addTask";
@@ -72,11 +81,7 @@ public class TaskController {
                 model.addAttribute("days", "Time is up");
             }
         }
-        List<File> files = filesRepo.findAllByTask(task);
-        for (File file: files) {
-            String name = file.getFilename();
-            file.setFilename(name.substring(name.indexOf('.') + 1));
-        }
+        List<File> files = getTasksFiles(task);
         files.toArray();
         if (files.size() > 0) {
             model.addAttribute("files", files);
@@ -122,8 +127,23 @@ public class TaskController {
                           @RequestParam String descriptionOfTask,
                           @RequestParam String finishDate,
                           @RequestPart(name = "files", required = false) MultipartFile[] files,
-                          @RequestParam(required = false) Long taskId) {
+                          @RequestParam(required = false) Long taskId,
+                          Model model) {
         Task task = taskService.updateTask(user, nameOfTask, descriptionOfTask, finishDate, files, taskId);
-        return "redirect:/task/" + task.getId();
+        List<String> notes = taskService.getNotes();
+        notes.toArray();
+        if (notes.size() > 0) {
+            model.addAttribute("notes", notes);
+            model.addAttribute("task", task);
+            List<File> files1 = getTasksFiles(task);
+            files1.toArray();
+            if (files1.size() > 0) {
+                model.addAttribute("files", files1);
+            }
+            return "task/addTask";
+        }
+        List<Task> tasks = taskRepo.findAllByUserOrderByDate(user);
+        model.addAttribute("tasks", tasks);
+        return "task/taskList";
     }
 }

@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserService {
     private final StorageService storageService;
@@ -19,18 +22,34 @@ public class UserService {
         this.storageService = storageService;
     }
 
-    public void updateUser(User user, String name, String email, MultipartFile file) {
+    public List<String> updateUser(User user, String name, String email, MultipartFile file) {
+        List<String> notes = new ArrayList<String>();
         if(!name.isEmpty()) {
-            if(userRepo.findByName(name) == null) { user.setName(name);}
+            if (name.length() > 25) {
+                notes.add("Your nickname is too long! (it should consists less then 25 characters)");
+            } else if(userRepo.findByName(name) == null) {
+                user.setName(name);
+            } else {
+                notes.add("This name has already exists!");
+            }
         }
         if(!email.isEmpty()) {
-            if(userRepo.findByEmail(email) == null) { user.setEmail(email);}
+            if(userRepo.findByEmail(email) == null) {
+                user.setEmail(email);
+            } else {
+                notes.add("This email has already used!");
+            }
         }
-        if(!file.isEmpty() && storageService.rightFormat(file.getOriginalFilename())) {
-            String filename = user.getPicture();
-            user.setPicture(storageService.store(file));
-            storageService.delete(filename);
+        if(!file.isEmpty()) {
+            if (!storageService.rightFormat(file.getOriginalFilename())) {
+                notes.add("Your file has wrong format!");
+            } else {
+                String filename = user.getPicture();
+                user.setPicture(storageService.store(file));
+                storageService.delete(filename);
+            }
         }
         userRepo.save(user);
+        return notes;
     }
 }

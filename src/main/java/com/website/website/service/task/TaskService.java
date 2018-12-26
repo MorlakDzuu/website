@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,8 +23,13 @@ public class TaskService {
     @Autowired
     private FilesRepo filesRepo;
 
+    List<String> notes = new ArrayList<String>();
+
     @Value("${max.files.number}")
     int MAX_FILES_NUMBER;
+
+    @Value("${max.filesize}")
+    int MAX_FILE_SIZE;
 
     private final StorageService storageService;
 
@@ -38,6 +44,15 @@ public class TaskService {
             filesRepo.delete(file);
         }
         taskRepo.delete(task);
+    }
+
+    public List<String> getNotes() {
+        List<String> tempNotes = new ArrayList<>();
+        for (String str: notes) {
+            tempNotes.add(str);
+        }
+        notes.clear();
+        return tempNotes;
     }
 
     public Task updateTask(User user,
@@ -67,10 +82,18 @@ public class TaskService {
             for (MultipartFile file: files) {
                 if (!file.isEmpty()) {
                     if (storageService.getFilesNumber(user) < MAX_FILES_NUMBER) {
-                        File fileOfTask = new File();
-                        fileOfTask.setFilename(storageService.store(file));
-                        fileOfTask.setTask(task);
-                        filesRepo.save(fileOfTask);
+                        if (file.getSize() <= MAX_FILE_SIZE) {
+                            File fileOfTask = new File();
+                            fileOfTask.setFilename(storageService.store(file));
+                            fileOfTask.setTask(task);
+                            filesRepo.save(fileOfTask);
+                        } else {
+                            notes.add("This file " + file.getOriginalFilename() + " is too big");
+                            return task;
+                        }
+                    } else {
+                        notes.add("We can't download this file " + file.getOriginalFilename() + " because you have uploaded too many files");
+                        return task;
                     }
                 }
             }
