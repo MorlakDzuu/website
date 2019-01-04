@@ -1,6 +1,7 @@
 <#import "../parts/common.ftl" as c>
 <#include "../parts/security.ftl">
 <@c.page>
+<div class="container">
 <div style="margin-top: 30px;">
     <div class="row">
         <div class="col s4 m4">
@@ -42,5 +43,6 @@
         </form>
         </div>
     </div>
+</div>
 </div>
 </@c.page>

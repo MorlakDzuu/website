@@ -1,5 +1,6 @@
 package com.website.website.config;
 
+import com.website.website.domain.Role;
 import com.website.website.domain.User;
 import com.website.website.repo.UserRepo;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
@@ -10,6 +11,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -43,6 +46,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 newUser.setName((String) map.get("name"));
                 newUser.setEmail((String) map.get("email"));
                 newUser.setPicture((String) map.get("picture"));
+                newUser.setRoles(Collections.singleton(Role.USER));
 
                 return newUser;
             });

@@ -4,6 +4,7 @@ import com.website.website.domain.User;
 import com.website.website.repo.UserRepo;
 import com.website.website.service.storage.StorageService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +14,9 @@ import java.util.List;
 @Service
 public class UserService {
     private final StorageService storageService;
+
+    @Value("${max.filesize}")
+    int MAX_FILE_SIZE;
 
     @Autowired
     private UserRepo userRepo;
@@ -44,9 +48,13 @@ public class UserService {
             if (!storageService.rightFormat(file.getOriginalFilename())) {
                 notes.add("Your file has wrong format!");
             } else {
-                String filename = user.getPicture();
-                user.setPicture(storageService.store(file));
-                storageService.delete(filename);
+                if (file.getSize() <= MAX_FILE_SIZE) {
+                    String filename = user.getPicture();
+                    user.setPicture(storageService.store(file));
+                    storageService.delete(filename);
+                } else {
+                    notes.add("File " + file.getOriginalFilename() + " is too big");
+                }
             }
         }
         userRepo.save(user);

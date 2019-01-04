@@ -6,7 +6,6 @@ import com.website.website.domain.User;
 import com.website.website.repo.FilesRepo;
 import com.website.website.repo.TaskRepo;
 import com.website.website.repo.UserRepo;
-import com.website.website.service.notes.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -141,6 +140,15 @@ public class FileSystemStorageService implements StorageService {
             numb += files.size();
         }
         return numb;
+    }
+
+    public List<File> getTasksFiles(Task task) {
+        List<File> files = filesRepo.findAllByTask(task);
+        for (File file: files) {
+            String name = file.getFilename();
+            file.setFilename(name.substring(name.indexOf('.') + 1));
+        }
+        return files;
     }
 
     @Override
