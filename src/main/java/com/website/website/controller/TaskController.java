@@ -16,6 +16,8 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -63,14 +65,25 @@ public class TaskController {
 
     @GetMapping("/taskList")
     public String taskList(@AuthenticationPrincipal User user,
+                           @RequestParam(required = false) Long pageNumber,
                            Model model) {
         List<Task> tasks = taskRepo.findAllByUserOrderByDate(user);
+        int tasksNumber = tasks.size();
+        if (pageNumber != null) {
+            Pageable page = new PageRequest(pageNumber.intValue(), 10);
+            tasks = taskRepo.findAllByUser(user, page);
+            model.addAttribute("currentPage", pageNumber + 1);
+        } else {
+            Pageable page = new PageRequest(0, 10);
+            tasks = taskRepo.findAllByUser(user, page);
+        }
         List<TaskListOutput> taskListOutputs = new ArrayList<>();
-        for (Task task:tasks) {
+        for (Task task: tasks) {
             TaskListOutput taskListOutput = new TaskListOutput(task, tagService.getTagsByTask(task));
             taskListOutputs.add(taskListOutput);
         }
         model.addAttribute("data", taskListOutputs);
+        model.addAttribute("tasksNumber", tasksNumber);
         return "task/taskList";
     }
 
@@ -199,12 +212,16 @@ public class TaskController {
             return "task/addTask";
         }
         List<Task> tasks = taskRepo.findAllByUserOrderByDate(user);
+        int tasksNumber = tasks.size();
+        Pageable page = new PageRequest(0, 10);
+        tasks = taskRepo.findAllByUser(user, page);
         List<TaskListOutput> taskListOutputs = new ArrayList<>();
-        for (Task tas:tasks) {
+        for (Task tas: tasks) {
             TaskListOutput taskListOutput = new TaskListOutput(tas, tagService.getTagsByTask(tas));
             taskListOutputs.add(taskListOutput);
         }
         model.addAttribute("data", taskListOutputs);
+        model.addAttribute("tasksNumber", tasksNumber);
         return "task/taskList";
     }
 }

@@ -118,10 +118,12 @@ public class TaskService {
             } else {
                 notes.add("Description is too big");
             }
-            if (nameOfTask.length() < 255) {
+            if (nameOfTask.length() < 100) {
                 nameOfTask = nameOfTask.replace("<", "&lt");
                 nameOfTask = nameOfTask.replace(">", "&gt");
                 task.setName(nameOfTask);
+            } else {
+                notes.add("Name is too big");
             }
             for (MultipartFile file: files) {
                 if (!file.isEmpty()) {
@@ -145,20 +147,21 @@ public class TaskService {
             for (String str: tags) {
                 if (str.length() > 50) {
                     notes.add("Tag " + str + " is too big");
-                }
-                Tag tag = tagRepo.findAllByTag(str);
-                if (tag == null) {
-                    tag = new Tag();
-                    tag.setTag(str);
-                    tagRepo.save(tag);
-                }
-                tag = tagRepo.findAllByTag(str);
-                TagToTask tagToTask = tagToTaskRepo.findByTaskAndTag(task, tag);
-                if (tagToTask == null) {
-                    tagToTask = new TagToTask();
-                    tagToTask.setTag(tag);
-                    tagToTask.setTask(task);
-                    tagToTaskRepo.save(tagToTask);
+                } else {
+                    Tag tag = tagRepo.findAllByTag(str);
+                    if (tag == null) {
+                        tag = new Tag();
+                        tag.setTag(str);
+                        tagRepo.save(tag);
+                    }
+                    tag = tagRepo.findAllByTag(str);
+                    TagToTask tagToTask = tagToTaskRepo.findByTaskAndTag(task, tag);
+                    if (tagToTask == null) {
+                        tagToTask = new TagToTask();
+                        tagToTask.setTag(tag);
+                        tagToTask.setTask(task);
+                        tagToTaskRepo.save(tagToTask);
+                    }
                 }
             }
         }

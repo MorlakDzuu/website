@@ -52,15 +52,18 @@ $('.chips-autocomplete').chips({
     }
 });
 
-$.getJSON("/getAllNames", function (data) {
-    data.forEach(function (dat) {
-        dataNames[dat] = null;
+var searchForm = document.getElementById("searchForm");
+
+searchForm.addEventListener('click', function () {
+    $.getJSON("/getAllNames", function (data) {
+        data.forEach(function (dat) {
+            dataNames[dat] = null;
+        });
+    });
+    $('.autocomplete').autocomplete({
+        data: dataNames
     });
 })
-
-$('.autocomplete').autocomplete({
-    data: dataNames
-});
 
 var tags = document.querySelectorAll('.deleteTag');
 tags.forEach(function (tag) { 

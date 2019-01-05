@@ -3,7 +3,7 @@
 <@c.page>
 <div class="container">
     <div style="margin-top: 30px;">
-        <#list data?if_exists as elem>
+        <#list data?if_exists?reverse as elem>
             <div class="row">
                 <div class="col s10">
                     <a href="/task/${elem.task.id}">
@@ -31,7 +31,18 @@
                     document.location.href = '/task/${elem.task.id}/delete';
                 }})
             </script>
+        <#else>
+            <div class="red-text">Sorry, but you don't have tasks :(</div>
         </#list>
     </div>
+    <#if tasksNumber??>
+        <#if !(tasksNumber < 10)>
+            <ul class="pagination">
+                <#list 1 .. (tasksNumber / 10 + 1) as number>
+                    <li class="waves-effect <#if currentPage??><#if currentPage == number>active</#if><#else><#if number == 1>active</#if></#if>"><a href="/taskList?pageNumber=${number - 1}">${number}</a></li>
+                </#list>
+            </ul>
+        </#if>
+    </#if>
 </div>
 </@c.page>

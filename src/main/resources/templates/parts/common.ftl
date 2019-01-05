@@ -23,7 +23,7 @@
               <li><a href="/user">My personal Area</a></li>
         </#if>
             </ul>
-            <form class="search-box right" action="/getSearchResults" id="form1" >
+            <form class="search-box right" action="/getSearchResults" id="searchForm" >
                 <div class="input-field">
                     <input id="search" type="search" name="searchString" class="autocomplete" autocomplete="off" placeholder="Click to search" required>
                     <i class="material-icons">close</i>

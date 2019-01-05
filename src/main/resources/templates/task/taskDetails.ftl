@@ -37,7 +37,7 @@
         <#list files?sort_by("filename") as file>
           <li class="collection-item">
               <div>${file.filename}
-                  <a class="secondary-content" href="/task/file/${file.id}">
+                  <a class="close secondary-content" href="/task/file/${file.id}">
                       <i class="material-icons">file_download</i>
                   </a>
                   <a class="secondary-content" href="/task/file/${file.id}/delete" style="margin-right: 20px; color: red;">
