@@ -38,32 +38,38 @@ $('.chips-placeholder').chips({
 var dataTags = {};
 var dataNames = {};
 
-$.getJSON("/getAllTags", function (data) {
-    data.forEach(function (dat) {
-        dataTags[dat] = null;
-    });
-})
-
-$('.chips-autocomplete').chips({
-    autocompleteOptions: {
-        data: dataTags,
-        limit: 100,
-        minLength: 1
-    }
-});
-
 var searchForm = document.getElementById("searchForm");
+var inputTags = document.getElementById("inputTags");
 
-searchForm.addEventListener('click', function () {
-    $.getJSON("/getAllNames", function (data) {
-        data.forEach(function (dat) {
-            dataNames[dat] = null;
+if (inputTags) {
+    inputTags.addEventListener('click', function () {
+        $.getJSON("/getAllTags", function (data) {
+            data.forEach(function (dat) {
+                dataTags[dat] = null;
+            });
+        })
+
+        $('.chips-autocomplete').chips({
+            autocompleteOptions: {
+                data: dataTags,
+                limit: 100,
+                minLength: 1
+            }
         });
     });
-    $('.autocomplete').autocomplete({
-        data: dataNames
+}
+if (searchForm) {
+    searchForm.addEventListener('click', function () {
+        $.getJSON("/getAllNames", function (data) {
+            data.forEach(function (dat) {
+                dataNames[dat] = null;
+            });
+        });
+        $('.autocomplete').autocomplete({
+            data: dataNames
+        });
     });
-})
+}
 
 var tags = document.querySelectorAll('.deleteTag');
 tags.forEach(function (tag) { 
@@ -74,9 +80,7 @@ tags.forEach(function (tag) {
         $.ajax({
             type: 'GET',
             url: '/deleteTag',
-            data: 'taskId=' + taskId + '&tagId=' + tagId,
-            success: function(data){
-            }
+            data: 'taskId=' + taskId + '&tagId=' + tagId
         });
 
     })

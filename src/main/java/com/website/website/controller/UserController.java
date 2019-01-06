@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -44,6 +43,9 @@ public class UserController {
     public String main(@AuthenticationPrincipal User user,
                        Model model) {
         List<Task> tasks = taskRepo.findAllByUserOrderByDate(user);
+        model.addAttribute("name", user.getUsername());
+        model.addAttribute("picture", user.getPicture());
+        model.addAttribute("email", user.getEmail());
         model.addAttribute("tasksNumber", tasks.size());
         model.addAttribute("downloadsLeft",MAX_FILES_NUMBER - storageService.getFilesNumber(user));
         return "user/userPersonalArea";
@@ -60,6 +62,9 @@ public class UserController {
         notes.toArray();
         model.addAttribute("notes", notes);
         model.addAttribute("tasksNumber", tasks.size());
+        model.addAttribute("name", user.getUsername());
+        model.addAttribute("picture", user.getPicture());
+        model.addAttribute("email", user.getEmail());
         model.addAttribute("downloadsLeft",MAX_FILES_NUMBER - storageService.getFilesNumber(user));
         return "user/userPersonalArea";
     }

@@ -23,7 +23,7 @@
     </div>
     <div class="input-field  m-t-0">
         <i class="material-icons prefix">visibility</i>
-        <div class="chips chips-placeholder chips-autocomplete m-t-0"></div>
+        <div class="chips chips-placeholder chips-autocomplete m-t-0" id="inputTags"></div>
     </div>
     <input type="hidden" id="tags" name="tags">
     <input type="hidden" name="taskId" value="${task?if_exists.id?if_exists}">

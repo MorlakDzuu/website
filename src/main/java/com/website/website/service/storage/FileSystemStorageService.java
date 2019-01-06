@@ -55,7 +55,7 @@ public class FileSystemStorageService implements StorageService {
     }
 
     public void delete(String fileName) {
-        if(!fileName.isEmpty()) {
+        if(fileName != null) {
             Path path = Paths.get(rootLocation + "/" + fileName.replace(fileRequest, ""));
             try {
                 Files.deleteIfExists(path);

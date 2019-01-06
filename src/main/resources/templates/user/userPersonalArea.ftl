@@ -7,11 +7,11 @@
         <div class="col s4 m4">
             <div class="card">
                 <div class="card-image">
-                    <img src="${picture}">
+                    <img src="${picture?if_exists}">
                 </div>
                 <div class="card-content">
-                    <p class="card-text">${name}</p>
-                    <p class="card-text">${email}</p>
+                    <p class="card-text">${name?if_exists}</p>
+                    <p class="card-text">${email?if_exists}</p>
                     <p class="card-text">Number of tasks: ${tasksNumber}</p>
                     <p class="card-text">Uploads left: ${downloadsLeft}</p>
                 </div>
