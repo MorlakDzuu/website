@@ -89,6 +89,7 @@ public class TaskController {
 
     @GetMapping("/task/{task}")
     public String showTask(@PathVariable Task task,
+                           @RequestParam(required = false) Long currentPage,
                            Model model) throws ParseException {
         String finish_date = task.getFinish_date();
         if (finish_date != null) {
@@ -109,6 +110,9 @@ public class TaskController {
         List<Tag> tags = tagService.getTagsByTask(task);
         model.addAttribute("tags", tags);
         model.addAttribute("task", task);
+        if (currentPage != null) {
+            model.addAttribute("currentPage", currentPage);
+        }
         return "task/taskDetails";
     }
 

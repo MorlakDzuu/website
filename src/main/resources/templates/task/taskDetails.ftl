@@ -1,7 +1,7 @@
 <#import "../parts/common.ftl" as c>
 <#include "../parts/security.ftl">
 <@c.page>
-<a href="/taskList" class="btn-floating btn-large waves-effect waves-light" style="position: fixed;"><i class="material-icons">arrow_back</i></a>
+<a href="/taskList<#if currentPage??>?pageNumber=${currentPage-1}</#if>" class="btn-floating btn-large waves-effect waves-light" style="position: fixed;"><i class="material-icons">arrow_back</i></a>
 <div class="container">
 <div class="row">
     <div id="taskId" hidden="true">${task.id}</div>

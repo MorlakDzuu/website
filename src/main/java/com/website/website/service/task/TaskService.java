@@ -125,24 +125,6 @@ public class TaskService {
             } else {
                 notes.add("Name is too big");
             }
-            for (MultipartFile file: files) {
-                if (!file.isEmpty()) {
-                    if (storageService.getFilesNumber(user) < MAX_FILES_NUMBER) {
-                        if (file.getSize() <= MAX_FILE_SIZE) {
-                            File fileOfTask = new File();
-                            fileOfTask.setFilename(storageService.store(file));
-                            fileOfTask.setTask(task);
-                            filesRepo.save(fileOfTask);
-                        } else {
-                            notes.add("This file " + file.getOriginalFilename() + " is too big");
-                            return task;
-                        }
-                    } else {
-                        notes.add("We can't download this file " + file.getOriginalFilename() + " because you have uploaded too many files");
-                        return task;
-                    }
-                }
-            }
             taskRepo.save(task);
             for (String str: tags) {
                 if (str.length() > 50) {
@@ -164,6 +146,25 @@ public class TaskService {
                     }
                 }
             }
+            for (MultipartFile file: files) {
+                if (!file.isEmpty()) {
+                    if (storageService.getFilesNumber(user) < MAX_FILES_NUMBER) {
+                        if (file.getSize() <= MAX_FILE_SIZE) {
+                            File fileOfTask = new File();
+                            fileOfTask.setFilename(storageService.store(file));
+                            fileOfTask.setTask(task);
+                            filesRepo.save(fileOfTask);
+                        } else {
+                            notes.add("This file " + file.getOriginalFilename() + " is too big");
+                            return task;
+                        }
+                    } else {
+                        notes.add("We can't download this file " + file.getOriginalFilename() + " because you have uploaded too many files");
+                        return task;
+                    }
+                }
+            }
+            taskRepo.save(task);
         }
         return task;
     }
