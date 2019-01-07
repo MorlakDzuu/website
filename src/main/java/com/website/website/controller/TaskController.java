@@ -208,6 +208,8 @@ public class TaskController {
         if (notes.size() > 0) {
             model.addAttribute("notes", notes);
             model.addAttribute("task", task);
+            List<Tag> tagsOfTask = tagService.getTagsByTask(task);
+            model.addAttribute("tagsOfTask", tagsOfTask);
             List<File> files1 = storageService.getTasksFiles(task);
             files1.toArray();
             if (files1.size() > 0) {

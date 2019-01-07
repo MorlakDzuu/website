@@ -13,17 +13,28 @@ $(document).ready(function(){
     $('.datepicker').datepicker();
 });
 
+function contains(arr, elem) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === elem) {
+            return true;
+        }
+    }
+    return false;
+}
+
 var addTaskForm = document.getElementById("addTaskForm");
 
 if(addTaskForm) {
     addTaskForm.addEventListener('submit', function () {
         var chips = document.querySelectorAll('.chip');
+        var oldChips = document.querySelectorAll('.old');
         var all = [];
         chips.forEach(function (chip) {
             var str = chip.textContent;
             str = str.replace("close", '');
-            all.push(str);
-            console.log(str);
+            if (!contains(oldChips, chip)) {
+                all.push(str);
+            }
         });
         document.getElementById('tags').value = all;
         addTaskForm.submit();
@@ -76,7 +87,6 @@ tags.forEach(function (tag) {
     tag.addEventListener('click', function () {
         var taskId = document.getElementById("taskId").textContent;
         var tagId = tag.textContent.replace("close", '');
-        console.log(taskId + ' ' + tagId);
         $.ajax({
             type: 'GET',
             url: '/deleteTag',
