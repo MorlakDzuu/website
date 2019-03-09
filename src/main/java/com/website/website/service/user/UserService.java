@@ -1,5 +1,6 @@
 package com.website.website.service.user;
 
+import com.website.website.data.UserData;
 import com.website.website.domain.Role;
 import com.website.website.domain.User;
 import com.website.website.repo.UserRepo;
@@ -70,6 +71,21 @@ public class UserService implements UserDetailsService {
 
 
         return true;
+    }
+
+    public List<UserData> getUserData(List<User> users) {
+        List<UserData> userDataList = new ArrayList<>();
+        for (User user: users) {
+            UserData userData = new UserData(
+                    user.getId(),
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getRoles(),
+                    user.getPicture()
+            );
+            userDataList.add(userData);
+        }
+        return userDataList;
     }
 
     public List<String> updateUser(User user, String name, String email, MultipartFile file) {

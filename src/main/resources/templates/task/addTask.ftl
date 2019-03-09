@@ -33,23 +33,23 @@
         </button>
     </form>
     <!-- Default with no input (automatically generated)  -->
-
-    <!-- Customizable input  -->
-<#list tagsOfTask?if_exists as tag>
-    <div class="chip green m-t-4 old">
-        <span class="white-text">${tag.tag}</span>
-        <i class="close material-icons deleteTag">close<div hidden="true">${tag.id}</div></i>
-    </div>
-</#list>
-<#if files??>
-    <ul class="collection with-header">
-        <li class="collection-header"><h4>Files</h4></li>
-        <#list files?if_exists?sort_by("filename") as file>
-          <li class="collection-item">
-              <div>${file.filename}</div>
-          </li>
+    <div style="margin-top: 15px;">
+        <#list tagsOfTask?if_exists as tag>
+            <div class="chip green m-t-4 old">
+                <span class="white-text">${tag.tag}</span>
+                <i class="close material-icons deleteTag">close<div hidden="true">${tag.id}</div></i>
+            </div>
         </#list>
-    </ul>
-</#if>
+    </div>
+    <#if files??>
+        <ul class="collection with-header">
+            <li class="collection-header"><h4>Files</h4></li>
+            <#list files?if_exists?sort_by("filename") as file>
+              <li class="collection-item">
+                  <div>${file.filename}</div>
+              </li>
+            </#list>
+        </ul>
+    </#if>
 </div>
 </@c.page>

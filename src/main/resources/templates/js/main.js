@@ -8,10 +8,20 @@ if(a) {
     });
 }
 
-$(document).ready(function(){
+$(document).ready(function() {
     $('.sidenav').sidenav();
     $('.datepicker').datepicker();
 });
+
+$(document).ready(function() {
+    $('.sidenav').sidenav();
+    $('.datepicker').datepicker();
+});
+
+$(document).ready(function(){
+    $('.timepicker').timepicker();
+});
+
 
 function contains(arr, elem) {
     for (var i = 0; i < arr.length; i++) {
@@ -63,7 +73,7 @@ if (inputTags) {
         $('.chips-autocomplete').chips({
             autocompleteOptions: {
                 data: dataTags,
-                limit: 100,
+                limit:50,
                 minLength: 1
             }
         });
